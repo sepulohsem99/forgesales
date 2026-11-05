@@ -1,0 +1,44 @@
+PASS  3 pricing cards
+PASS  7 features
+PASS  5 process steps
+PASS  FAQ items
+PASS  comparison rows
+PASS  8 demo products
+PASS  4 journey steps
+PASS  WhatsApp links wired
+PASS  all in-page anchors resolve
+PASS  no dead placeholder links
+PASS  all WA links prefilled
+PASS  3 package CTAs
+PASS  package CTAs name the package
+PASS  package CTAs include price
+PASS  FAQ opens
+PASS  FAQ closes on second click
+PASS  empty form blocked (2 errors)
+PASS  invalid phone rejected
+PASS  form status visible
+PASS  honest no-backend message
+PASS  modal WA carries form data
+PASS  no h-overflow @320px
+PASS  no h-overflow @360px
+PASS  no h-overflow @390px
+PASS  no h-overflow @414px
+PASS  no h-overflow @768px
+PASS  no h-overflow @1024px
+PASS  no h-overflow @1280px
+PASS  no h-overflow @1920px
+PASS  burger visible on mobile
+PASS  drawer opens
+PASS  scrim dims page behind drawer
+PASS  background scroll locked
+PASS  scrim click closes drawer
+PASS  drawer closes on link click
+PASS  privacy.html loads
+PASS  privacy.html title
+PASS  terms.html loads
+PASS  terms.html title
+PASS  no console errors
+PASS  no page errors
+PASS  no failed requests
+
+42/42 passed
