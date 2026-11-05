@@ -167,7 +167,7 @@ async def main():
         ok("drawer closes on link click", closed)
 
         # ---------- legal pages ----------
-        for path, needle in [("privacy.html", "Privacy Policy"), ("terms.html", "Terms & Conditions")]:
+        for path, needle in [("/privacy", "Privacy Policy"), ("/terms", "Terms & Conditions")]:
             r = await pg.goto(BASE + "/" + path, wait_until="networkidle")
             ok(f"{path} loads", r.status == 200, str(r.status))
             t = await pg.title()
