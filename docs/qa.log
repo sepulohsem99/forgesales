@@ -33,10 +33,10 @@ PASS  scrim dims page behind drawer
 PASS  background scroll locked
 PASS  scrim click closes drawer
 PASS  drawer closes on link click
-PASS  /privacy loads
-PASS  /privacy title
-PASS  /terms loads
-PASS  /terms title
+PASS  /privacy/ loads
+PASS  /privacy/ title
+PASS  /terms/ loads
+PASS  /terms/ title
 PASS  no console errors
 PASS  no page errors
 PASS  no failed requests
