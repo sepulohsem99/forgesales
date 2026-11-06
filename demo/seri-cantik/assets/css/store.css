@@ -2579,7 +2579,7 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* ============================================================
-   MOBILE PRODUCT PAGE — conversion layout
+   MOBILE PRODUCT PAGE - conversion layout
    Visual QA at 390px showed the packshot eating the whole first
    screen, pushing the variant chips and Add to Cart below the fold.
    Fix: shorter media, 44px variant chips, sticky buy bar.
