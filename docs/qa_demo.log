@@ -1,0 +1,119 @@
+PASS  demo homepage loads
+PASS  4 category tiles
+PASS  best sellers rendered
+PASS  new arrivals rendered
+PASS  6 demo reviews
+PASS  6 FAQ items
+PASS  3 promo cards
+PASS  packshot SVGs rendered
+PASS  header mounted
+PASS  cart drawer mounted
+PASS  Forge CTA present
+PASS  brand disclaimer present
+PASS  disclaimer names no real affiliation
+PASS  demo→forge CTA links to #start
+PASS  shop loads 18 products
+PASS  search 'serum' narrows results
+PASS  search updates URL
+PASS  search clear restores 18
+PASS  empty state shows for no match
+PASS  wellness filter → 4 items
+PASS  filter updates heading
+PASS  filter updates URL
+PASS  sort price ascending correct
+PASS  sort price descending correct
+PASS  PDP title correct
+PASS  PDP has 6 variants
+PASS  PDP shows SKU
+PASS  PDP shows details list
+PASS  PDP demo note present
+PASS  variant selection marks active
+PASS  qty increment works
+PASS  add to cart writes storage
+PASS  cart drawer opens after add
+PASS  cart badge shows 3
+PASS  cart total = 3 x RM89 = RM267
+PASS  qty increment in cart
+PASS  qty decrement in cart
+PASS  second product added
+PASS  remove item works
+PASS  cart persists after reload
+PASS  badge restored after reload
+PASS  checkout form visible
+PASS  checkout summary matches cart rows
+PASS  16 Malaysian states loaded
+PASS  discount SERI10 applies
+PASS  discount row appears
+PASS  discount = 10% of subtotal
+PASS  invalid code rejected
+PASS  min-spend code rejected below threshold
+PASS  shipping charged under RM100
+PASS  empty form blocks submit (6 errors)
+PASS  still on checkout after invalid
+PASS  invalid email rejected
+PASS  all errors cleared with valid data
+PASS  redirects to order confirmation
+PASS  confirmation greets customer
+PASS  order number generated
+PASS  simulation notice shown
+PASS  cart cleared after order
+PASS  badge reset to 0
+PASS  forge landing loads
+PASS  Studio Rumah fully replaced
+PASS  Seri Cantik appears on landing
+PASS  preview shows 8 beauty products
+PASS  beauty packshot in preview
+PASS  Cuba Live Demo → /demo/seri-cantik/
+PASS  Bina Kedai Online CTA present
+PASS  existing pricing preserved (3 cards)
+PASS  existing enquiry form intact
+PASS  no h-overflow 320px /
+PASS  no h-overflow 320px /shop/
+PASS  no h-overflow 320px /produk/?sku=SC-SET-04
+PASS  no h-overflow 320px /checkout/
+PASS  no h-overflow 375px /
+PASS  no h-overflow 375px /shop/
+PASS  no h-overflow 375px /produk/?sku=SC-SET-04
+PASS  no h-overflow 375px /checkout/
+PASS  no h-overflow 414px /
+PASS  no h-overflow 414px /shop/
+PASS  no h-overflow 414px /produk/?sku=SC-SET-04
+PASS  no h-overflow 414px /checkout/
+PASS  no h-overflow 768px /
+PASS  no h-overflow 768px /shop/
+PASS  no h-overflow 768px /produk/?sku=SC-SET-04
+PASS  no h-overflow 768px /checkout/
+PASS  no h-overflow 1024px /
+PASS  no h-overflow 1024px /shop/
+PASS  no h-overflow 1024px /produk/?sku=SC-SET-04
+PASS  no h-overflow 1024px /checkout/
+PASS  no h-overflow 1440px /
+PASS  no h-overflow 1440px /shop/
+PASS  no h-overflow 1440px /produk/?sku=SC-SET-04
+PASS  no h-overflow 1440px /checkout/
+PASS  burger visible on mobile
+PASS  mobile drawer opens
+PASS  scroll locked when drawer open
+PASS  mobile drawer closes
+PASS  persistent Forge CTA shows on /shop/
+PASS  persistent CTA links to Forge on /shop/
+PASS  persistent Forge CTA shows on /produk/?sku=SC-FDN-01
+PASS  persistent CTA links to Forge on /produk/?sku=SC-FDN-01
+PASS  persistent Forge CTA shows on /checkout/
+PASS  persistent CTA links to Forge on /checkout/
+PASS  persistent CTA hidden on desktop
+PASS  route / → 200
+PASS  route /shop/ → 200
+PASS  route /produk/?sku=SC-FDN-01 → 200
+PASS  route /checkout/ → 200
+PASS  route /order/ → 200
+PASS  no broken images
+PASS  exactly one h1
+PASS  html lang is ms-MY
+PASS  no unlabeled form inputs
+PASS  no unlabeled buttons
+PASS  no console errors
+PASS  no page errors
+PASS  no failed requests
+
+117/117 passed

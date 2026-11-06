@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ms-MY">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pesanan Diterima — Seri Cantik Store (Demo)</title>
+<meta name="description" content="Pengesahan pesanan demo. Tiada pesanan sebenar dibuat.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#b8506e">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23b8506e'/><text x='50' y='72' font-size='58' font-family='Georgia,serif' fill='white' text-anchor='middle'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/demo/seri-cantik/assets/css/store.css">
+</head>
+<body>
+
+<div class="ann" role="region" aria-label="Pengumuman">
+  <div class="ann__track" id="annTrack"></div>
+</div>
+
+<main class="confirm">
+  <div class="wrap">
+    <div id="confirmRoot"></div>
+  </div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="disclaimer">
+      <b>Penafian.</b> Ini pesanan simulasi. Tiada bayaran diambil, tiada produk dihantar,
+      dan tiada rekod sebenar disimpan selain dalam pelayar anda sendiri.
+    </div>
+    <div class="ftr__bottom">
+      <span>© <span id="yr">2026</span> Seri Cantik Store (demo) · oleh Forge Sales</span>
+      <div class="ftr__legal">
+        <a href="/demo/seri-cantik/">Utama</a>
+        <a href="/demo/seri-cantik/shop/">Beli lagi</a>
+        <a href="https://forgesales.pages.dev/#start">Bina Kedai Saya</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/demo/seri-cantik/assets/js/data.js"></script>
+<script src="/demo/seri-cantik/assets/js/packshot.js"></script>
+<script src="/demo/seri-cantik/assets/js/store.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  mountChrome("order");
+
+  const msgs = ["Pesanan demo berjaya direkod", "Tiada bayaran sebenar", "Terima kasih kerana mencuba"];
+  const ck = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m20 6-11 11-5-5"/></svg>`;
+  const one = msgs.map((m) => `<span>${ck}${m}</span>`).join("");
+  document.getElementById("annTrack").innerHTML = one + one;
+
+  const PAY_LABEL = {
+    fpx: "Online Banking (FPX)",
+    ewallet: "E-Wallet",
+    cod: "Bayar Semasa Terima (COD)",
+  };
+
+  let order = null;
+  try {
+    order = JSON.parse(localStorage.getItem(LS_ORDER) || "null");
+  } catch {
+    order = null;
+  }
+
+  const root = document.getElementById("confirmRoot");
+
+  if (!order || !order.no) {
+    root.innerHTML = `
+      <div class="empty-state">
+        <h3>Tiada pesanan dijumpai</h3>
+        <p>Kami tidak jumpa rekod pesanan dalam pelayar ini.</p>
+        <a class="btn btn--rose btn--sm" href="/demo/seri-cantik/shop/">Mula membeli</a>
+      </div>`;
+    return;
+  }
+
+  const d = new Date(order.at);
+  const fmt = d.toLocaleDateString("ms-MY", { day: "numeric", month: "long", year: "numeric" }) +
+    ", " + d.toLocaleTimeString("ms-MY", { hour: "2-digit", minute: "2-digit" });
+
+  root.innerHTML = `
+    <div class="confirm__ico">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m20 6-11 11-5-5"/></svg>
+    </div>
+
+    <h1>Terima kasih, ${esc(order.customer.name.split(" ")[0])}!</h1>
+    <p class="confirm__sub">
+      Pesanan demo anda telah direkod dalam pelayar ini. Kami tidak menghantar apa-apa
+      dan tidak mengambil bayaran — ini hanya untuk menunjukkan aliran pesanan.
+    </p>
+
+    <div class="sim-notice">
+      <b>⚑ Ini pesanan simulasi</b>
+      Tiada transaksi berlaku. Tiada barang akan dihantar. Tiada maklumat pembayaran
+      diambil atau disimpan. Semua data pesanan hanya tersimpan dalam localStorage
+      pelayar anda sendiri dan boleh dipadam bila-bila masa.
+    </div>
+
+    <div class="order-box">
+      <div class="order-num">
+        <div>
+          <div class="tiny" style="margin-bottom:2px">No. pesanan demo</div>
+          <b>${esc(order.no)}</b>
+        </div>
+        <span class="pbadge pbadge--new" style="font-size:9px">SIMULASI</span>
+      </div>
+
+      <div class="order-row"><span>Tarikh</span><b>${esc(fmt)}</b></div>
+      <div class="order-row"><span>Nama</span><b>${esc(order.customer.name)}</b></div>
+      <div class="order-row"><span>Telefon</span><b>${esc(order.customer.phone)}</b></div>
+      <div class="order-row"><span>E-mel</span><b>${esc(order.customer.email)}</b></div>
+      <div class="order-row"><span>Alamat</span><b style="max-width:60%;text-align:right">${esc(order.customer.address)}, ${esc(order.customer.postcode)} ${esc(order.customer.state)}</b></div>
+      ${order.customer.note ? `<div class="order-row"><span>Arahan</span><b style="max-width:60%;text-align:right">${esc(order.customer.note)}</b></div>` : ""}
+      <div class="order-row"><span>Bayaran</span><b>${esc(PAY_LABEL[order.pay] || order.pay)} <span class="tiny">(demo)</span></b></div>
+
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">
+        <div class="tiny" style="margin-bottom:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:700">Item</div>
+        ${order.items.map((l) => `
+          <div class="order-row">
+            <span>${esc(l.name)}${l.variantName ? ` · ${esc(l.variantName)}` : ""} × ${l.qty}</span>
+            <b>${rm(l.sum)}</b>
+          </div>`).join("")}
+      </div>
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">
+        <div class="order-row"><span>Subtotal</span><b>${rm(order.subtotal)}</b></div>
+        ${order.discount > 0 ? `<div class="order-row" style="color:var(--rose)"><span>Diskaun (${esc(order.code)})</span><b style="color:var(--rose)">−${rm(order.discount)}</b></div>` : ""}
+        <div class="order-row"><span>Penghantaran</span><b>${order.shipping === 0 ? "Percuma" : rm(order.shipping)}</b></div>
+        <div class="order-row" style="font-size:16px;font-weight:750;color:var(--ink);padding-top:10px;margin-top:6px;border-top:1px solid var(--line)">
+          <span>Jumlah</span><b style="font-size:16px">${rm(order.total)}</b>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-bottom:32px">
+      <a class="btn btn--rose" href="/demo/seri-cantik/shop/">Teruskan Membeli</a>
+      <a class="btn btn--ghost" href="/demo/seri-cantik/">Kembali ke Utama</a>
+    </div>
+
+    <section class="forge-cta" style="border-radius:var(--r-lg);text-align:left">
+      <div class="forge-cta__inner">
+        <h2 style="text-align:center">Suka aliran pesanan <em>seperti ini?</em></h2>
+        <p style="text-align:center">
+          Forge Sales boleh bina kedai yang sama untuk bisnes anda — dengan troli,
+          checkout, kod diskaun dan pengurusan pesanan.
+        </p>
+        <div class="forge-cta__btns">
+          <a class="btn btn--rose" href="https://forgesales.pages.dev/#start">Dapatkan Kedai Online Saya</a>
+          <a class="btn btn--ghost" href="https://forgesales.pages.dev/#pricing">Lihat Pakej</a>
+        </div>
+      </div>
+    </section>
+  `;
+})();
+</script>
+</body>
+</html>

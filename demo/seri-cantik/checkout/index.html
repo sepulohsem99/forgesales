@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ms-MY">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pembayaran — Seri Cantik Store (Demo)</title>
+<meta name="description" content="Halaman pembayaran demo. Tiada bayaran sebenar diambil.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#b8506e">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23b8506e'/><text x='50' y='72' font-size='58' font-family='Georgia,serif' fill='white' text-anchor='middle'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/demo/seri-cantik/assets/css/store.css">
+</head>
+<body class="has-mobar">
+
+<div class="ann" role="region" aria-label="Pengumuman">
+  <div class="ann__track" id="annTrack"></div>
+</div>
+
+<main class="co">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb" style="margin-bottom:14px">
+      <a href="/demo/seri-cantik/">Utama</a>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg>
+      <a href="/demo/seri-cantik/shop/">Produk</a>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg>
+      <span>Pembayaran</span>
+    </nav>
+
+    <h1 class="h-sec" style="margin-bottom:6px">Pembayaran</h1>
+    <p class="muted" style="font-size:13px;margin-bottom:22px">
+      Ini pembayaran <b>simulasi</b>. Tiada bayaran sebenar diambil dan tiada barang dihantar.
+    </p>
+
+    <div id="coEmpty" class="empty-state" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <h3>Troli anda kosong</h3>
+      <p>Pilih produk dulu sebelum buat pesanan.</p>
+      <a class="btn btn--rose btn--sm" href="/demo/seri-cantik/shop/">Lihat Produk</a>
+    </div>
+
+    <form class="co__grid" id="coForm" novalidate hidden>
+      <!-- ===== KIRI: borang ===== -->
+      <div>
+        <!-- 1. maklumat -->
+        <section class="co-card">
+          <div class="co-card__head">
+            <span class="co-card__n">1</span>
+            <h2>Maklumat anda</h2>
+          </div>
+
+          <div class="field">
+            <label for="fName">Nama penuh <span class="req">*</span></label>
+            <input type="text" id="fName" name="name" autocomplete="name" placeholder="Contoh: Nurul Aisyah binti Rahman">
+            <span class="field__err">Sila masukkan nama penuh anda.</span>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="fEmail">E-mel <span class="req">*</span></label>
+              <input type="email" id="fEmail" name="email" autocomplete="email" placeholder="nama@email.com">
+              <span class="field__err">Sila masukkan e-mel yang sah.</span>
+            </div>
+            <div class="field">
+              <label for="fPhone">No. telefon <span class="req">*</span></label>
+              <input type="tel" id="fPhone" name="phone" autocomplete="tel" inputmode="tel" placeholder="012-345 6789">
+              <span class="field__err">Sila masukkan no. telefon Malaysia yang sah.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. alamat -->
+        <section class="co-card">
+          <div class="co-card__head">
+            <span class="co-card__n">2</span>
+            <h2>Alamat penghantaran</h2>
+          </div>
+
+          <div class="field">
+            <label for="fAddr">Alamat <span class="req">*</span></label>
+            <textarea id="fAddr" name="address" autocomplete="street-address" placeholder="No. rumah, jalan, taman, kawasan"></textarea>
+            <span class="field__err">Sila masukkan alamat penuh.</span>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="fPost">Poskod <span class="req">*</span></label>
+              <input type="text" id="fPost" name="postcode" inputmode="numeric" autocomplete="postal-code" placeholder="53100" maxlength="5">
+              <span class="field__err">Poskod mesti 5 digit.</span>
+            </div>
+            <div class="field">
+              <label for="fState">Negeri <span class="req">*</span></label>
+              <div class="field__sel">
+                <select id="fState" name="state" autocomplete="address-level1">
+                  <option value="">Pilih negeri</option>
+                </select>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
+              </div>
+              <span class="field__err">Sila pilih negeri.</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="fNote">Arahan penghantaran <span style="font-weight:400;color:var(--ink-3)">(pilihan)</span></label>
+            <textarea id="fNote" name="note" placeholder="Contoh: rumah pagar biru, tinggal di belakang. Hubungi sebelum hantar."></textarea>
+          </div>
+        </section>
+
+        <!-- 3. bayaran -->
+        <section class="co-card">
+          <div class="co-card__head">
+            <span class="co-card__n">3</span>
+            <h2>Cara bayar</h2>
+          </div>
+
+          <div class="pay-opts">
+            <label class="pay is-on" data-pay="fpx">
+              <input type="radio" name="pay" value="fpx" checked>
+              <span class="pay__radio"></span>
+              <span class="pay__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10l9-6 9 6M5 10v9h14v-9M9 19v-5h6v5"/></svg></span>
+              <span class="pay__txt">
+                <b>Online Banking (FPX)</b>
+                <span>Maybank2u, CIMB Clicks, Public Bank</span>
+              </span>
+            </label>
+
+            <label class="pay" data-pay="ewallet">
+              <input type="radio" name="pay" value="ewallet">
+              <span class="pay__radio"></span>
+              <span class="pay__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M16 14.5h2"/></svg></span>
+              <span class="pay__txt">
+                <b>E-Wallet</b>
+                <span>Touch 'n Go, GrabPay, Boost</span>
+              </span>
+            </label>
+
+            <label class="pay" data-pay="cod">
+              <input type="radio" name="pay" value="cod">
+              <span class="pay__radio"></span>
+              <span class="pay__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/></svg></span>
+              <span class="pay__txt">
+                <b>Bayar Semasa Terima (COD)</b>
+                <span>Tunai semasa barang sampai</span>
+              </span>
+            </label>
+          </div>
+
+          <p class="tiny" style="margin-top:12px">
+            <b>Penting:</b> Halaman ini tidak meminta dan tidak menyimpan maklumat kad,
+            kata laluan atau butiran perbankan. Semua pilihan di atas adalah simulasi.
+          </p>
+        </section>
+      </div>
+
+      <!-- ===== KANAN: ringkasan ===== -->
+      <aside class="co__summary">
+        <div class="sum">
+          <h2 class="sum__title">Ringkasan pesanan</h2>
+
+          <div class="sum__items" id="sumItems"></div>
+
+          <div class="code-form" id="codeForm">
+            <input type="text" id="codeInput" placeholder="Kod diskaun" aria-label="Kod diskaun" autocomplete="off">
+            <button type="button" id="codeBtn" class="btn btn--ghost">Guna</button>
+          </div>
+          <div class="code-msg" id="codeMsg" role="status"></div>
+          <div id="appliedBox"></div>
+
+          <div class="sum__rows" id="sumRows"></div>
+
+          <button type="submit" class="btn btn--rose btn--block btn--lg" id="payBtn" style="margin-top:16px">
+            Buat Pesanan (Demo)
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+
+          <p class="tiny" style="text-align:center;margin-top:10px">
+            Tiada bayaran sebenar. Tiada barang dihantar.
+          </p>
+        </div>
+
+        <div class="sum" style="margin-top:12px">
+          <div class="field" style="margin:0">
+            <label for="fZone">Zon penghantaran</label>
+            <div class="field__sel">
+              <select id="fZone">
+                <option value="semenanjung">Semenanjung Malaysia — RM8 (percuma RM100+)</option>
+                <option value="sabahSarawak">Sabah &amp; Sarawak — RM15 (percuma RM200+)</option>
+              </select>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </form>
+  </div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="disclaimer">
+      <b>Penafian.</b> Seri Cantik Store ialah demo fiksyen oleh Forge Sales. Semua pesanan adalah simulasi.
+      Tiada bayaran diambil, tiada maklumat pembayaran disimpan, dan tiada produk dihantar.
+    </div>
+    <div class="ftr__bottom">
+      <span>© <span id="yr">2026</span> Seri Cantik Store (demo)</span>
+      <div class="ftr__legal">
+        <a href="https://forgesales.pages.dev/privacy/">Privasi</a>
+        <a href="https://forgesales.pages.dev/terms/">Terma</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/demo/seri-cantik/assets/js/data.js"></script>
+<script src="/demo/seri-cantik/assets/js/packshot.js"></script>
+<script src="/demo/seri-cantik/assets/js/store.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  mountChrome("checkout");
+
+  const msgs = ["Pembayaran simulasi sahaja", "Tiada bayaran sebenar diambil", "Tiada barang dihantar"];
+  const ck = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m20 6-11 11-5-5"/></svg>`;
+  const one = msgs.map((m) => `<span>${ck}${m}</span>`).join("");
+  document.getElementById("annTrack").innerHTML = one + one;
+
+  /* ---------- negeri ---------- */
+  const st = document.getElementById("fState");
+  STATES.forEach((s) => {
+    const o = document.createElement("option");
+    o.value = s;
+    o.textContent = s;
+    st.appendChild(o);
+  });
+
+  /* ---------- kosong? ---------- */
+  if (!Cart.count()) {
+    document.getElementById("coEmpty").hidden = false;
+    return;
+  }
+  document.getElementById("coForm").hidden = false;
+
+  /* ---------- render ringkasan ---------- */
+  function renderSummary() {
+    const lines = Cart.lines();
+    document.getElementById("sumItems").innerHTML = lines.map((l) => `
+      <div class="sum__item">
+        <div class="sum__img">
+          ${packshot(l.img, l.palette, l.name)}
+          <span class="sum__qty">${l.qty}</span>
+        </div>
+        <div>
+          <div class="sum__name">${esc(l.name)}</div>
+          ${l.variantName ? `<div class="sum__var">${esc(l.variantName)}</div>` : ""}
+        </div>
+        <div class="sum__price">${rm(l.sum)}</div>
+      </div>
+    `).join("");
+
+    const sub = Cart.subtotal();
+    const disc = Promo.amount();
+    const ship = Shipping.fee();
+
+    document.getElementById("sumRows").innerHTML = `
+      <div class="sum__row"><span>Subtotal (${Cart.count()} item)</span><span>${rm(sub)}</span></div>
+      ${disc > 0 ? `<div class="sum__row sum__row--disc"><span>Diskaun (${Promo.code})</span><span>−${rm(disc)}</span></div>` : ""}
+      <div class="sum__row">
+        <span>Penghantaran <span class="tiny">(${Shipping.rule().eta})</span></span>
+        <span>${ship === 0 ? "Percuma" : rm(ship)}</span>
+      </div>
+      <div class="sum__row sum__row--total"><span>Jumlah bayar</span><span>${rm(totalDue())}</span></div>
+    `;
+
+    /* kotak diskaun digunakan */
+    const ab = document.getElementById("appliedBox");
+    if (Promo.code) {
+      ab.innerHTML = `
+        <div class="applied">
+          <span>✓ ${esc(Promo.code)} · ${esc(Promo.info.label)}</span>
+          <button type="button" id="removeCode" aria-label="Buang kod diskaun">×</button>
+        </div>`;
+      document.getElementById("removeCode")?.addEventListener("click", () => {
+        Promo.clear();
+        document.getElementById("codeInput").value = "";
+        showCodeMsg("", "");
+        renderSummary();
+        toast("Kod diskaun dibuang");
+      });
+    } else {
+      ab.innerHTML = "";
+    }
+  }
+
+  function showCodeMsg(msg, kind) {
+    const el = document.getElementById("codeMsg");
+    el.textContent = msg;
+    el.className = "code-msg" + (kind ? " is-" + kind : "");
+  }
+
+  /* ---------- kod diskaun ---------- */
+  function applyCode() {
+    const input = document.getElementById("codeInput");
+    const res = Promo.apply(input.value);
+    showCodeMsg(res.msg, res.ok ? "ok" : "bad");
+    if (res.ok) {
+      input.value = "";
+      renderSummary();
+      toast("Kod diskaun digunakan");
+    }
+  }
+
+  document.getElementById("codeBtn").addEventListener("click", applyCode);
+  document.getElementById("codeInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      applyCode();
+    }
+  });
+
+  /* ---------- zon ---------- */
+  const zoneSel = document.getElementById("fZone");
+  zoneSel.value = Shipping.zone;
+  zoneSel.addEventListener("change", () => {
+    Shipping.zone = zoneSel.value;
+    renderSummary();
+  });
+
+  /* ---------- pilihan bayaran ---------- */
+  document.querySelectorAll(".pay").forEach((lab) => {
+    lab.addEventListener("click", () => {
+      document.querySelectorAll(".pay").forEach((x) => x.classList.remove("is-on"));
+      lab.classList.add("is-on");
+      lab.querySelector("input").checked = true;
+    });
+  });
+
+  /* ---------- validation ---------- */
+  function setErr(el, msg) {
+    const f = el.closest(".field");
+    if (!f) return;
+    f.classList.toggle("has-error", !!msg);
+    if (msg) {
+      const e = f.querySelector(".field__err");
+      if (e) e.textContent = msg;
+    }
+  }
+
+  const validEmail = (v) => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v.trim());
+  const validPhone = (v) => {
+    const d = v.replace(/\D/g, "");
+    if (d.startsWith("60")) return d.length >= 11 && d.length <= 12;
+    return d.length >= 9 && d.length <= 11;
+  };
+  const validPost = (v) => /^\d{5}$/.test(v.trim());
+
+  ["fName", "fEmail", "fPhone", "fAddr", "fPost", "fState"].forEach((id) => {
+    const el = document.getElementById(id);
+    el?.addEventListener("input", () => setErr(el, ""));
+    el?.addEventListener("change", () => setErr(el, ""));
+  });
+
+  /* ---------- submit ---------- */
+  document.getElementById("coForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const f = {
+      name: document.getElementById("fName"),
+      email: document.getElementById("fEmail"),
+      phone: document.getElementById("fPhone"),
+      addr: document.getElementById("fAddr"),
+      post: document.getElementById("fPost"),
+      state: document.getElementById("fState"),
+      note: document.getElementById("fNote"),
+    };
+
+    let bad = null;
+
+    if (!f.name.value.trim() || f.name.value.trim().length < 2) {
+      setErr(f.name, "Sila masukkan nama penuh anda.");
+      bad = bad || f.name;
+    }
+    if (!validEmail(f.email.value)) {
+      setErr(f.email, "Sila masukkan e-mel yang sah.");
+      bad = bad || f.email;
+    }
+    if (!validPhone(f.phone.value)) {
+      setErr(f.phone, "Sila masukkan no. telefon Malaysia yang sah.");
+      bad = bad || f.phone;
+    }
+    if (!f.addr.value.trim() || f.addr.value.trim().length < 8) {
+      setErr(f.addr, "Sila masukkan alamat penuh (jalan, taman, kawasan).");
+      bad = bad || f.addr;
+    }
+    if (!validPost(f.post.value)) {
+      setErr(f.post, "Poskod mesti 5 digit, contoh 53100.");
+      bad = bad || f.post;
+    }
+    if (!f.state.value) {
+      setErr(f.state, "Sila pilih negeri.");
+      bad = bad || f.state;
+    }
+
+    if (bad) {
+      bad.focus();
+      bad.scrollIntoView({ block: "center", behavior: "smooth" });
+      toast("Sila semak maklumat yang bertanda merah", "info");
+      return;
+    }
+
+    /* sahkan diskaun masih layak */
+    Promo.validate();
+
+    const pay = document.querySelector('input[name="pay"]:checked')?.value || "fpx";
+    const order = {
+      no: makeOrderNo(),
+      at: new Date().toISOString(),
+      items: Cart.lines(),
+      subtotal: Cart.subtotal(),
+      discount: Promo.amount(),
+      code: Promo.code,
+      shipping: Shipping.fee(),
+      zone: Shipping.zone,
+      total: totalDue(),
+      customer: {
+        name: f.name.value.trim(),
+        email: f.email.value.trim(),
+        phone: f.phone.value.trim(),
+        address: f.addr.value.trim(),
+        postcode: f.post.value.trim(),
+        state: f.state.value,
+        note: f.note.value.trim(),
+      },
+      pay,
+    };
+
+    try {
+      localStorage.setItem(LS_ORDER, JSON.stringify(order));
+    } catch (err) {
+      console.warn("order save failed", err);
+    }
+
+    Cart.clear();
+    Promo.clear();
+    location.href = "/demo/seri-cantik/order/";
+  });
+
+  renderSummary();
+})();
+</script>
+
+<div class="mobar" id="mobar">
+  <a class="btn btn--rose btn--sm" href="https://forgesales.pages.dev/#start" data-forge-cta>
+    Dapatkan Kedai Online Saya
+  </a>
+</div>
+</body>
+</html>

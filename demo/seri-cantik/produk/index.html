@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ms-MY">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produk — Seri Cantik Store (Demo)</title>
+<meta name="description" content="Butiran produk demo kecantikan dan wellness Malaysia.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#b8506e">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23b8506e'/><text x='50' y='72' font-size='58' font-family='Georgia,serif' fill='white' text-anchor='middle'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/demo/seri-cantik/assets/css/store.css">
+</head>
+<body class="has-mobar">
+
+<div class="ann" role="region" aria-label="Pengumuman">
+  <div class="ann__track" id="annTrack"></div>
+</div>
+
+<main class="pdp">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb" style="margin-bottom:16px">
+      <a href="/demo/seri-cantik/">Utama</a>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg>
+      <a href="/demo/seri-cantik/shop/">Produk</a>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg>
+      <span id="crumbName">—</span>
+    </nav>
+
+    <div id="pdpRoot"></div>
+
+    <!-- RECOMMENDED -->
+    <section style="margin-top:52px">
+      <div class="sec__head">
+        <div>
+          <span class="eyebrow">Mungkin anda suka</span>
+          <h2 class="h-sec">Produk <em>berkaitan.</em></h2>
+        </div>
+      </div>
+      <div class="rail" id="recRail"></div>
+    </section>
+
+    <section class="forge-cta" style="margin-block:40px;border-radius:var(--r-lg)">
+      <div class="wrap forge-cta__inner">
+        <h2>Mahukan kedai online <em>seperti ini?</em></h2>
+        <p>Kedai anda boleh ada halaman produk, variasi, stok dan pembayaran — siap dalam kira-kira dua minggu.</p>
+        <div class="forge-cta__btns">
+          <a class="btn btn--rose" href="https://forgesales.pages.dev/#start">Dapatkan Kedai Online Saya</a>
+          <a class="btn btn--ghost" href="https://forgesales.pages.dev/#pricing">Lihat Pakej</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="disclaimer">
+      <b>Penafian.</b> Seri Cantik Store ialah demo fiksyen oleh Forge Sales. Bukan kedai rasmi,
+      pengedar atau rakan kongsi mana-mana jenama sebenar. Semua produk, harga dan stok adalah rekaan.
+    </div>
+    <div class="ftr__bottom">
+      <span>© <span id="yr">2026</span> Seri Cantik Store (demo) · oleh Forge Sales</span>
+      <div class="ftr__legal">
+        <a href="https://forgesales.pages.dev/privacy/">Privasi</a>
+        <a href="https://forgesales.pages.dev/terms/">Terma</a>
+        <a href="/demo/seri-cantik/">Utama</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/demo/seri-cantik/assets/js/data.js"></script>
+<script src="/demo/seri-cantik/assets/js/packshot.js"></script>
+<script src="/demo/seri-cantik/assets/js/store.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  mountChrome("pdp");
+
+  /* announcement */
+  const msgs = ["Penghantaran percuma RM100+", "Kod SERI10 — 10% diskaun", "Bayar FPX / e-wallet / COD"];
+  const ck = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m20 6-11 11-5-5"/></svg>`;
+  const one = msgs.map((m) => `<span>${ck}${m}</span>`).join("");
+  document.getElementById("annTrack").innerHTML = one + one;
+
+  /* ---------- ambil produk ---------- */
+  const sku = new URLSearchParams(location.search).get("sku");
+  const p = prodById(sku);
+
+  if (!p) {
+    document.getElementById("pdpRoot").innerHTML = `
+      <div class="empty-state">
+        <h3>Produk tidak dijumpai</h3>
+        <p>Produk yang anda cari tiada dalam katalog demo.</p>
+        <a class="btn btn--rose btn--sm" href="/demo/seri-cantik/shop/">Lihat semua produk</a>
+      </div>`;
+    return;
+  }
+
+  /* ---------- meta ---------- */
+  document.title = `${p.name} — Seri Cantik Store (Demo)`;
+  document.querySelector('meta[name="description"]').setAttribute("content", p.short);
+  document.getElementById("crumbName").textContent = p.name;
+
+  const cat = CATS.find((c) => c.id === p.cat);
+  const stars = (p.sku.charCodeAt(5) % 2) + 4;
+  const reviewN = (p.sku.charCodeAt(6) % 40) + 12;
+  const discount = p.compareAt ? Math.round((1 - p.price / p.compareAt) * 100) : 0;
+  const out = p.stock === "out";
+
+  let selectedVariant = p.variants ? p.variants.options[0].id : null;
+  let qty = 1;
+
+  function variantObj() {
+    return p.variants ? p.variants.options.find((o) => o.id === selectedVariant) : null;
+  }
+  function currentPrice() {
+    const v = variantObj();
+    return p.price + (v?.delta || 0);
+  }
+
+  /* ---------- render utama ---------- */
+  function renderPdp() {
+    const v = variantObj();
+    const price = currentPrice();
+    const was = p.compareAt ? p.compareAt + (v?.delta || 0) : null;
+
+    const badges = [];
+    if (out) badges.push('<span class="pbadge pbadge--out">Habis stok</span>');
+    else {
+      if (p.badge === "best") badges.push('<span class="pbadge pbadge--best">Best Seller</span>');
+      if (p.badge === "new") badges.push('<span class="pbadge pbadge--new">Baru</span>');
+      if (p.badge === "bundle") badges.push('<span class="pbadge pbadge--bundle">Bundle</span>');
+    }
+
+    document.getElementById("pdpRoot").innerHTML = `
+      <div class="pdp__grid">
+        <div>
+          <div class="pdp__gallery">
+            <div class="pdp__badges">${badges.join("")}</div>
+            ${packshot(p.img, p.palette, p.name)}
+            <span class="pdp__zoom">Ilustrasi rekaan</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="pdp__cat">${esc(cat?.name || "")}</div>
+          <h1 class="pdp__title">${esc(p.name)}</h1>
+
+          <div class="pdp__rating">
+            ${STARS(stars)}
+            <span>${(stars).toFixed(1)} · ${reviewN} ulasan demo</span>
+          </div>
+
+          <div class="pdp__price">
+            <span class="pdp__now" id="priceNow">${rm(price)}</span>
+            ${was ? `<span class="pdp__was">${rm(was)}</span>` : ""}
+            ${was ? `<span class="pdp__save">Jimat ${discount}%</span>` : ""}
+          </div>
+          <div class="pdp__sku">SKU: ${esc(p.sku)}</div>
+
+          <p class="pdp__short">${esc(p.short)}</p>
+
+          ${p.variants ? `
+            <div class="pdp__field">
+              <label class="pdp__label">${esc(p.variants.label)} <span id="varName">${esc(v?.name || "")}</span></label>
+              <div class="variants" role="radiogroup" aria-label="${esc(p.variants.label)}">
+                ${p.variants.options.map((o) => `
+                  <button class="vopt ${o.id === selectedVariant ? "is-on" : ""}"
+                    data-var="${o.id}" role="radio" aria-checked="${o.id === selectedVariant}">
+                    ${esc(o.name)}${o.delta ? ` <span style="opacity:.7;font-size:11px">(${o.delta > 0 ? "+" : "−"}${rm(Math.abs(o.delta))})</span>` : ""}
+                  </button>`).join("")}
+              </div>
+            </div>` : ""}
+
+          <div class="pdp__field">
+            <label class="pdp__label">Kuantiti</label>
+            <div class="pdp__buy">
+              <div class="qty">
+                <button id="qDec" aria-label="Kurangkan kuantiti">−</button>
+                <input type="number" id="qIn" value="1" min="1" max="99" aria-label="Kuantiti">
+                <button id="qInc" aria-label="Tambah kuantiti">+</button>
+              </div>
+              <button class="btn btn--rose btn--lg" id="addBtn" ${out ? "disabled" : ""}>
+                ${out ? "Habis stok" : "Tambah ke Troli"}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9.5" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12h11L21 7H6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="pdp__stock pcard__stock--${p.stock}">
+            ${STOCK_LABEL[p.stock]}
+            ${p.stock === "low" ? " — tinggal beberapa unit" : ""}
+          </div>
+
+          <ul class="pdp__perks">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 6h11v10H2zM13 10h5l3 3v3h-8"/><circle cx="6" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg> Penghantaran percuma untuk belanja RM100 ke atas</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg> Dibungkus dengan bubble wrap tebal</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/></svg> Bayar FPX, e-wallet atau COD</li>
+          </ul>
+
+          <div class="pdp__details">
+            <h3>Butiran produk</h3>
+            <ul>${p.details.map((d) => `<li>${esc(d)}</li>`).join("")}</ul>
+          </div>
+
+          <div class="pdp__note">
+            <b>Nota demo:</b> Ini produk fiksyen untuk tujuan demonstrasi. Tiada produk sebenar,
+            tiada tuntutan kesihatan dibuat, dan tiada jual beli berlaku.
+          </div>
+        </div>
+      </div>
+    `;
+
+    bindPdpEvents();
+  }
+
+  function bindPdpEvents() {
+    /* variant */
+    document.querySelectorAll("[data-var]").forEach((b) =>
+      b.addEventListener("click", () => {
+        selectedVariant = b.dataset.var;
+        renderPdp();
+      })
+    );
+
+    /* qty */
+    const qi = document.getElementById("qIn");
+    document.getElementById("qInc")?.addEventListener("click", () => {
+      qty = Math.min(99, (parseInt(qi.value, 10) || 1) + 1);
+      qi.value = qty;
+    });
+    document.getElementById("qDec")?.addEventListener("click", () => {
+      qty = Math.max(1, (parseInt(qi.value, 10) || 1) - 1);
+      qi.value = qty;
+    });
+    qi?.addEventListener("change", () => {
+      qty = Math.max(1, Math.min(99, parseInt(qi.value, 10) || 1));
+      qi.value = qty;
+    });
+
+    /* add to cart */
+    document.getElementById("addBtn")?.addEventListener("click", () => {
+      if (out) return;
+      const ok = Cart.add(p.sku, selectedVariant, qty);
+      if (!ok) {
+        toast("Maaf, produk ini habis stok", "info");
+        return;
+      }
+      const v = variantObj();
+      toast(`${p.name}${v ? " · " + v.name : ""} ×${qty} ditambah`, "cart");
+      openCart();
+    });
+  }
+
+  renderPdp();
+
+  /* ---------- recommended ---------- */
+  const recs = PRODUCTS.filter((x) => x.cat === p.cat && x.sku !== p.sku).slice(0, 6);
+  const extra = PRODUCTS.filter((x) => x.cat !== p.cat && x.tags.includes("best")).slice(0, 3);
+  document.getElementById("recRail").innerHTML = [...recs, ...extra]
+    .slice(0, 6)
+    .map((x) => productCard(x))
+    .join("");
+
+  bindAddButtons();
+  initReveal();
+})();
+</script>
+
+<div class="mobar" id="mobar">
+  <a class="btn btn--rose btn--sm" href="https://forgesales.pages.dev/#start" data-forge-cta>
+    Dapatkan Kedai Online Saya
+  </a>
+</div>
+</body>
+</html>

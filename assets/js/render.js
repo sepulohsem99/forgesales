@@ -61,14 +61,14 @@ const MOCK_PRODUCTS = [
 
 /* ---------- Demo storefront products (illustrative) ---------- */
 const DEMO_PRODUCTS = [
-  { name: "Ridged Mug — Cream", cat: "Ceramics", price: 38, art: "mug", tag: "New" },
-  { name: "Bud Vase — Sage", cat: "Ceramics", price: 52, art: "vase" },
-  { name: "Soy Candle — Cedar", cat: "Home", price: 45, art: "candle" },
-  { name: "Linen Tote — Clay", cat: "Textiles", price: 89, art: "bag", tag: "Bestseller" },
-  { name: "Serving Plate", cat: "Tableware", price: 74, art: "plate" },
-  { name: "Nesting Bowl Set", cat: "Tableware", price: 128, art: "bowl" },
-  { name: "Stoneware Teapot", cat: "Ceramics", price: 165, art: "teapot" },
-  { name: "Waffle Hand Towel", cat: "Textiles", price: 34, art: "towel" },
+  { name: "Diamond Foundation", cat: "Penjagaan Wajah", price: 89, was: 119, art: "foundation", tag: "Best Seller" },
+  { name: "Serum Vitamin C", cat: "Penjagaan Wajah", price: 79, art: "serum", tag: "Baru" },
+  { name: "Serat Fiber Minuman", cat: "Wellness", price: 89, was: 109, art: "sachet" },
+  { name: "Losyen Susu Kambing", cat: "Penjagaan Badan", price: 55, was: 69, art: "pump", tag: "Best Seller" },
+  { name: "Krim Madu Propolis", cat: "Penjagaan Wajah", price: 65, was: 85, art: "jar" },
+  { name: "Body Scrub Kopi", cat: "Penjagaan Badan", price: 49, art: "jar2" },
+  { name: "Set Penjagaan Wajah", cat: "Bundle", price: 199, was: 259, art: "box", tag: "Bundle" },
+  { name: "Tinted Moisturizer", cat: "Penjagaan Wajah", price: 75, was: 95, art: "tube" },
 ];
 
 /* ---------- Feature icons ---------- */
@@ -273,20 +273,89 @@ function renderComparison() {
 }
 
 /* ---------- demo storefront ---------- */
+/* ---------- beauty packshots for the landing-page preview ---------- */
+const BEAUTY_ART = {
+  foundation: `<svg viewBox="0 0 100 130" aria-hidden="true">
+    <rect x="34" y="46" width="32" height="10" rx="3" fill="#c96b86"/>
+    <rect x="45" y="34" width="10" height="14" rx="2" fill="#c96b86" opacity=".85"/>
+    <rect x="26" y="56" width="48" height="62" rx="7" fill="#f3d4dd"/>
+    <rect x="26" y="56" width="10" height="62" rx="7" fill="#fff" opacity=".3"/>
+    <rect x="30" y="76" width="40" height="30" rx="3" fill="#fff8fa"/>
+    <text x="50" y="88" font-family="Georgia,serif" font-size="6" fill="#7d3450" text-anchor="middle">SERI CANTIK</text>
+    <text x="50" y="96" font-family="Helvetica" font-size="3.2" fill="#7d3450" opacity=".6" text-anchor="middle">FOUNDATION</text>
+  </svg>`,
+  serum: `<svg viewBox="0 0 100 130" aria-hidden="true">
+    <rect x="45" y="24" width="10" height="12" rx="2" fill="#9d6b82"/>
+    <path d="M47 36h6l4 8v6H43v-6z" fill="#9d6b82" opacity=".7"/>
+    <rect x="35" y="50" width="30" height="66" rx="6" fill="#efdfe6"/>
+    <rect x="38" y="70" width="24" height="32" rx="2" fill="#fff9fb"/>
+    <text x="50" y="82" font-family="Georgia,serif" font-size="4.6" fill="#5f3a4a" text-anchor="middle">SERI CANTIK</text>
+    <text x="50" y="89" font-family="Helvetica" font-size="2.6" fill="#5f3a4a" opacity=".6" text-anchor="middle">SERUM</text>
+  </svg>`,
+  sachet: `<svg viewBox="0 0 100 130" aria-hidden="true">
+    <path d="M22 34h56v72H22z" fill="#f3d4dd"/>
+    <path d="M22 34h56v8H22z" fill="#c96b86" opacity=".5"/>
+    <path d="M22 98h56v8H22z" fill="#c96b86" opacity=".5"/>
+    <rect x="30" y="54" width="40" height="32" rx="2" fill="#fff8fa"/>
+    <text x="50" y="66" font-family="Georgia,serif" font-size="5" fill="#7d3450" text-anchor="middle">SERI CANTIK</text>
+    <text x="50" y="74" font-family="Helvetica" font-size="3" fill="#7d3450" opacity=".6" text-anchor="middle">FIBER</text>
+  </svg>`,
+  pump: `<svg viewBox="0 0 100 130" aria-hidden="true">
+    <path d="M46 20h8v6h-8z" fill="#c9a06a"/>
+    <path d="M50 26v6h-6v7h12v-7h-6" fill="#c9a06a" opacity=".9"/>
+    <rect x="38" y="26" width="10" height="3" rx="1.5" fill="#c9a06a"/>
+    <rect x="30" y="39" width="40" height="77" rx="8" fill="#fae7d0"/>
+    <rect x="33" y="64" width="34" height="38" rx="3" fill="#fffdf8"/>
+    <text x="50" y="77" font-family="Georgia,serif" font-size="5" fill="#6f5227" text-anchor="middle">SERI CANTIK</text>
+    <text x="50" y="85" font-family="Helvetica" font-size="2.8" fill="#6f5227" opacity=".6" text-anchor="middle">LOSYEN</text>
+  </svg>`,
+  jar: `<svg viewBox="0 0 100 130" aria-hidden="true">
+    <rect x="24" y="26" width="52" height="15" rx="4" fill="#8c8264"/>
+    <rect x="22" y="45" width="56" height="66" rx="9" fill="#e8e3d3"/>
+    <rect x="28" y="66" width="44" height="30" rx="3" fill="#fdfcf7"/>
+    <text x="50" y="78" font-family="Georgia,serif" font-size="6" fill="#565033" text-anchor="middle">SERI CANTIK</text>
+    <text x="50" y="86" font-family="Helvetica" font-size="3" fill="#565033" opacity=".6" text-anchor="middle">KRIM MADU</text>
+  </svg>`,
+  jar2: `<svg viewBox="0 0 100 130" aria-hidden="true">
+    <rect x="24" y="26" width="52" height="15" rx="4" fill="#b8895f"/>
+    <rect x="22" y="45" width="56" height="66" rx="9" fill="#f7e6d8"/>
+    <rect x="28" y="66" width="44" height="30" rx="3" fill="#fffaf5"/>
+    <text x="50" y="78" font-family="Georgia,serif" font-size="6" fill="#6d4a2c" text-anchor="middle">SERI CANTIK</text>
+    <text x="50" y="86" font-family="Helvetica" font-size="3" fill="#6d4a2c" opacity=".6" text-anchor="middle">SCRUB KOPI</text>
+  </svg>`,
+  box: `<svg viewBox="0 0 100 130" aria-hidden="true">
+    <path d="M18 46l32-14 32 14v56l-32 14-32-14z" fill="#fae7d0"/>
+    <path d="M50 32l32 14v56l-32 14z" fill="#ecd0aa" opacity=".6"/>
+    <rect x="26" y="66" width="26" height="26" rx="2" fill="#fffdf8"/>
+    <text x="39" y="77" font-family="Georgia,serif" font-size="4" fill="#6f5227" text-anchor="middle">SERI</text>
+    <text x="39" y="83" font-family="Georgia,serif" font-size="4" fill="#6f5227" text-anchor="middle">CANTIK</text>
+  </svg>`,
+  tube: `<svg viewBox="0 0 100 130" aria-hidden="true">
+    <rect x="44" y="26" width="12" height="9" rx="2" fill="#b8895f"/>
+    <path d="M40 35h20l6 12v58l-6 5H40l-6-5V47z" fill="#f7e6d8"/>
+    <rect x="37" y="62" width="26" height="26" rx="2" fill="#fffaf5"/>
+    <text x="50" y="72" font-family="Georgia,serif" font-size="4.2" fill="#6d4a2c" text-anchor="middle">SERI CANTIK</text>
+    <text x="50" y="79" font-family="Helvetica" font-size="2.6" fill="#6d4a2c" opacity=".6" text-anchor="middle">SPF50</text>
+  </svg>`,
+};
+
 function renderDemo() {
   const grid = document.querySelector("[data-demo-products]");
   if (grid) {
     grid.innerHTML = DEMO_PRODUCTS.map(
       (p) => `<div class="pcard">
         <div class="pcard__img">
-          ${p.tag ? `<span class="pcard__tag ${p.tag === "New" ? "pcard__tag--new" : ""}">${esc(p.tag)}</span>` : ""}
-          ${ART[p.art]}
+          ${p.tag ? `<span class="pcard__tag ${p.tag === "Baru" ? "pcard__tag--new" : p.tag === "Bundle" ? "pcard__tag--bundle" : ""}">${esc(p.tag)}</span>` : ""}
+          ${BEAUTY_ART[p.art] || BEAUTY_ART.jar}
         </div>
         <div class="pcard__body">
           <div class="pcard__cat">${esc(p.cat)}</div>
           <div class="pcard__name">${esc(p.name)}</div>
           <div class="pcard__row">
-            <span class="pcard__price">${money(p.price)}</span>
+            <div>
+              <span class="pcard__price">${money(p.price)}</span>
+              ${p.was ? `<span class="pcard__was">${money(p.was)}</span>` : ""}
+            </div>
             <span class="pcard__add">Add</span>
           </div>
         </div>
@@ -294,8 +363,8 @@ function renderDemo() {
     ).join("");
   }
 
-  const art = document.querySelector(".ds__art");
-  if (art) art.innerHTML = ART.teapot;
+  const art = document.querySelector("[data-beauty-art]");
+  if (art) art.innerHTML = BEAUTY_ART.foundation;
 }
 
 /* ---------- FAQ ---------- */

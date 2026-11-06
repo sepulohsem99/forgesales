@@ -5,6 +5,11 @@ Live: **https://forgesales.pages.dev**
 A sales landing page for an e-commerce website development service in Malaysia.
 Built to convert Facebook-ad traffic into WhatsApp enquiries.
 
+It also ships a **live, fully functional Malaysian beauty & wellness demo
+store** at `/demo/seri-cantik/` — 18 products, real cart, search, filters,
+variants, discount codes, delivery calculation and a complete simulated
+checkout. See `docs/DEMO-STORE.md` for that subsystem.
+
 **Stack:** plain HTML + CSS + vanilla JS. No build step, no framework, no dependencies.
 Deploys to Cloudflare Pages by pointing at the folder.
 
@@ -27,8 +32,9 @@ python -m http.server 8790
 ```
 storefront-my/
 ├── index.html              sales page (all sections)
-├── privacy.html            Privacy Policy (PDPA 2010 template)
-├── terms.html              Terms & Conditions (template)
+├── privacy/index.html      Privacy Policy (PDPA 2010 template)
+├── terms/index.html        Terms & Conditions (template)
+├── demo/seri-cantik/       ★ live demo store (see docs/DEMO-STORE.md)
 ├── assets/
 │   ├── css/app.css         design system + all sections (~3k lines)
 │   └── js/
@@ -37,7 +43,9 @@ storefront-my/
 │       └── app.js          nav, WhatsApp, form, FAQ, reveal
 ├── docs/
 │   ├── RESEARCH.md         competitor + conversion notes
-│   ├── qa.py               automated QA suite (39 checks)
+│   ├── qa.py               landing QA (42 checks)
+│   ├── qa_demo.py          demo store QA (117 checks)
+│   ├── shots_demo.py       demo screenshots (32)
 │   ├── shots.py            screenshot generator (26 shots)
 │   ├── qa.log              latest QA run
 │   └── screenshots/        desktop, tablet, mobile captures

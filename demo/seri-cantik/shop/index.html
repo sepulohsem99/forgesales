@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ms-MY">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semua Produk — Seri Cantik Store (Demo)</title>
+<meta name="description" content="Lihat semua produk demo kecantikan dan wellness. Tapis ikut kategori, cari produk, susun ikut harga.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#b8506e">
+<link rel="canonical" href="https://forgesales.pages.dev/demo/seri-cantik/shop/">
+<meta property="og:title" content="Semua Produk — Seri Cantik Store">
+<meta property="og:description" content="Katalog demo kecantikan dan wellness Malaysia.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23b8506e'/><text x='50' y='72' font-size='58' font-family='Georgia,serif' fill='white' text-anchor='middle'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/demo/seri-cantik/assets/css/store.css">
+</head>
+<body class="shop-page has-mobar">
+
+<div class="ann" role="region" aria-label="Pengumuman">
+  <div class="ann__track" id="annTrack"></div>
+</div>
+
+<main>
+  <div class="shop-head">
+    <div class="wrap">
+      <div class="shop-head__top">
+        <div>
+          <nav class="crumbs" aria-label="Breadcrumb">
+            <a href="/demo/seri-cantik/">Utama</a>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg>
+            <span id="crumbNow">Semua Produk</span>
+          </nav>
+          <h1 class="h-sec" id="shopTitle">Semua Produk</h1>
+          <p class="muted" style="font-size:13px;margin-top:5px" id="shopSub">
+            Katalog demo — semua produk adalah rekaan.
+          </p>
+        </div>
+      </div>
+
+      <div class="shop-controls">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input type="search" id="q" placeholder="Cari produk, contoh: serum, losyen, fiber" aria-label="Cari produk">
+          <button class="search-clear" id="qClear" aria-label="Kosongkan carian">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-row" id="filterRow" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="sort-row">
+      <p class="result-n"><b id="nResults">0</b> produk dijumpai</p>
+      <div class="select-wrap">
+        <select id="sort" aria-label="Susun produk">
+          <option value="popular">Paling popular</option>
+          <option value="price-asc">Harga: rendah → tinggi</option>
+          <option value="price-desc">Harga: tinggi → rendah</option>
+          <option value="name">Nama A–Z</option>
+          <option value="new">Terbaru</option>
+        </select>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+    </div>
+
+    <div class="pgrid" id="grid"></div>
+
+    <div class="empty-state" id="empty" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <h3>Tiada produk dijumpai</h3>
+      <p>Cuba kata kunci lain, atau kosongkan tapisan.</p>
+      <button class="btn btn--rose btn--sm" id="resetBtn">Set semula</button>
+    </div>
+
+    <section class="forge-cta" style="margin-block:40px;border-radius:var(--r-lg)">
+      <div class="wrap forge-cta__inner">
+        <h2>Mahukan kedai online <em>seperti ini?</em></h2>
+        <p>Kedai anda boleh ada katalog, carian, troli dan pembayaran — siap dalam kira-kira dua minggu.</p>
+        <div class="forge-cta__btns">
+          <a class="btn btn--rose" href="https://forgesales.pages.dev/#start">Dapatkan Kedai Online Saya</a>
+          <a class="btn btn--ghost" href="https://forgesales.pages.dev/#pricing">Lihat Pakej</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="disclaimer">
+      <b>Penafian.</b> Seri Cantik Store ialah demo fiksyen oleh Forge Sales. Bukan kedai rasmi,
+      pengedar atau rakan kongsi mana-mana jenama sebenar. Semua produk, harga dan stok adalah
+      rekaan. Tiada jual beli sebenar berlaku.
+    </div>
+    <div class="ftr__bottom">
+      <span>© <span id="yr">2026</span> Seri Cantik Store (demo) · oleh Forge Sales</span>
+      <div class="ftr__legal">
+        <a href="https://forgesales.pages.dev/privacy/">Privasi</a>
+        <a href="https://forgesales.pages.dev/terms/">Terma</a>
+        <a href="/demo/seri-cantik/">Utama</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/demo/seri-cantik/assets/js/data.js"></script>
+<script src="/demo/seri-cantik/assets/js/packshot.js"></script>
+<script src="/demo/seri-cantik/assets/js/store.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
+  mountChrome("shop");
+
+  const params = new URLSearchParams(location.search);
+  const state = {
+    q: (params.get("q") || "").trim(),
+    cat: params.get("cat") || "all",
+    sort: params.get("sort") || "popular",
+  };
+
+  /* ---------- announcement ---------- */
+  const msgs = [
+    "Penghantaran percuma untuk belanja RM100 ke atas",
+    "Kod SERI10 — 10% diskaun",
+    "Bayar FPX, e-wallet atau COD",
+  ];
+  const ck = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m20 6-11 11-5-5"/></svg>`;
+  const one = msgs.map((m) => `<span>${ck}${m}</span>`).join("");
+  document.getElementById("annTrack").innerHTML = one + one;
+
+  /* ---------- filter chips ---------- */
+  function renderFilters() {
+    const counts = { all: PRODUCTS.length };
+    CATS.forEach((c) => (counts[c.id] = PRODUCTS.filter((p) => p.cat === c.id).length));
+
+    document.getElementById("filterRow").innerHTML =
+      `<button class="chip ${state.cat === "all" ? "is-on" : ""}" data-cat="all">
+         Semua <span class="chip__n">${counts.all}</span>
+       </button>` +
+      CATS.map((c) => `
+        <button class="chip ${state.cat === c.id ? "is-on" : ""}" data-cat="${c.id}">
+          ${esc(c.name)} <span class="chip__n">${counts[c.id]}</span>
+        </button>`).join("");
+
+    document.querySelectorAll("[data-cat]").forEach((b) =>
+      b.addEventListener("click", () => {
+        state.cat = b.dataset.cat;
+        syncUrl();
+        renderFilters();
+        render();
+      })
+    );
+  }
+
+  function syncUrl() {
+    const p = new URLSearchParams();
+    if (state.q) p.set("q", state.q);
+    if (state.cat !== "all") p.set("cat", state.cat);
+    if (state.sort !== "popular") p.set("sort", state.sort);
+    const qs = p.toString();
+    history.replaceState(null, "", qs ? "?" + qs : location.pathname);
+  }
+
+  /* ---------- filter + sort ---------- */
+  function filtered() {
+    let list = PRODUCTS.slice();
+
+    if (state.cat !== "all") list = list.filter((p) => p.cat === state.cat);
+
+    if (state.q) {
+      const q = state.q.toLowerCase();
+      list = list.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.short.toLowerCase().includes(q) ||
+          p.sku.toLowerCase().includes(q) ||
+          (CATS.find((c) => c.id === p.cat)?.name || "").toLowerCase().includes(q)
+      );
+    }
+
+    switch (state.sort) {
+      case "price-asc": list.sort((a, b) => a.price - b.price); break;
+      case "price-desc": list.sort((a, b) => b.price - a.price); break;
+      case "name": list.sort((a, b) => a.name.localeCompare(b.name, "ms")); break;
+      case "new":
+        list.sort((a, b) => (b.tags.includes("new") ? 1 : 0) - (a.tags.includes("new") ? 1 : 0));
+        break;
+      default:
+        list.sort((a, b) => (b.tags.includes("best") ? 1 : 0) - (a.tags.includes("best") ? 1 : 0));
+    }
+    return list;
+  }
+
+  /* ---------- render ---------- */
+  function render() {
+    const list = filtered();
+    const grid = document.getElementById("grid");
+    const empty = document.getElementById("empty");
+
+    document.getElementById("nResults").textContent = list.length;
+
+    const catObj = CATS.find((c) => c.id === state.cat);
+    document.getElementById("shopTitle").textContent = catObj ? catObj.name : "Semua Produk";
+    document.getElementById("crumbNow").textContent = catObj ? catObj.name : "Semua Produk";
+    document.getElementById("shopSub").textContent = catObj
+      ? catObj.desc
+      : "Katalog demo — semua produk adalah rekaan.";
+
+    if (!list.length) {
+      grid.innerHTML = "";
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+    grid.innerHTML = list.map((p) => productCard(p)).join("");
+    bindAddButtons(grid);
+    initReveal();
+  }
+
+  /* ---------- search ---------- */
+  const qInput = document.getElementById("q");
+  const qClear = document.getElementById("qClear");
+
+  qInput.value = state.q;
+  qClear.classList.toggle("is-on", !!state.q);
+
+  let t;
+  qInput.addEventListener("input", () => {
+    qClear.classList.toggle("is-on", !!qInput.value);
+    clearTimeout(t);
+    t = setTimeout(() => {
+      state.q = qInput.value.trim();
+      syncUrl();
+      render();
+    }, 220);
+  });
+  qClear.addEventListener("click", () => {
+    qInput.value = "";
+    state.q = "";
+    qClear.classList.remove("is-on");
+    syncUrl();
+    render();
+    qInput.focus();
+  });
+
+  /* ---------- sort ---------- */
+  const sortSel = document.getElementById("sort");
+  sortSel.value = state.sort;
+  sortSel.addEventListener("change", () => {
+    state.sort = sortSel.value;
+    syncUrl();
+    render();
+  });
+
+  /* ---------- reset ---------- */
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    state.q = "";
+    state.cat = "all";
+    state.sort = "popular";
+    qInput.value = "";
+    qClear.classList.remove("is-on");
+    sortSel.value = "popular";
+    syncUrl();
+    renderFilters();
+    render();
+  });
+
+  renderFilters();
+  render();
+})();
+</script>
+
+<div class="mobar" id="mobar">
+  <a class="btn btn--rose btn--sm" href="https://forgesales.pages.dev/#start" data-forge-cta>
+    Dapatkan Kedai Online Saya
+  </a>
+</div>
+</body>
+</html>
