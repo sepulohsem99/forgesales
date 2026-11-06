@@ -313,6 +313,10 @@ async def main():
 
         # ============ 9b. PERSISTENT FORGE CTA ============
         await pg.set_viewport_size({"width": 390, "height": 844})
+        # seed a cart so checkout renders its form and has scroll height
+        await pg.goto(D + "/shop/", wait_until="networkidle")
+        await pg.evaluate("Cart.clear(); Cart.add('SC-KRM-03', null, 1);")
+        await pg.wait_for_timeout(400)
         for path in ["/shop/", "/produk/?sku=SC-FDN-01", "/checkout/"]:
             await pg.goto(D + path, wait_until="networkidle")
             await pg.wait_for_timeout(700)
@@ -337,6 +341,47 @@ async def main():
         await pg.wait_for_timeout(500)
         ok("persistent CTA hidden on desktop",
            await pg.evaluate("getComputedStyle(document.getElementById('mobar')).display") == "none")
+
+        # ============ 9c. MOBILE NATIVENESS ============
+        await pg.set_viewport_size({"width": 390, "height": 844})
+        await pg.goto(D + "/", wait_until="networkidle")
+        await pg.wait_for_timeout(900)
+        mob = await pg.evaluate("""() => {
+          const fs = (s) => { const e = document.querySelector(s); return e ? parseFloat(getComputedStyle(e).fontSize) : 0; };
+          const pad = (s) => { const e = document.querySelector(s); return e ? parseFloat(getComputedStyle(e).paddingTop) : 0; };
+          const b = document.querySelector('.hero__actions .btn');
+          return { h1: fs('.h-display'), secPad: pad('.sec'),
+                   btnH: b ? b.getBoundingClientRect().height : 0,
+                   bodyFs: fs('body') };
+        }""")
+        # a shrunk desktop page reads at ~30px here; app-native needs >=38
+        ok("mobile hero heading >= 38px", mob["h1"] >= 38, str(mob["h1"]))
+        ok("mobile section padding >= 48px", mob["secPad"] >= 48, str(mob["secPad"]))
+        ok("mobile primary CTA >= 48px tall", mob["btnH"] >= 48, str(mob["btnH"]))
+        ok("mobile body text >= 15px", mob["bodyFs"] >= 15, str(mob["bodyFs"]))
+
+        # sticky buy bar on the product page
+        await pg.goto(D + "/produk/?sku=SC-FDN-01", wait_until="networkidle")
+        await pg.wait_for_timeout(900)
+        await pg.evaluate("window.scrollTo(0, 1400)")
+        await pg.wait_for_timeout(800)
+        bb = await pg.evaluate("""() => {
+          const bar = document.getElementById('buybar');
+          const r = bar.getBoundingClientRect();
+          const mobar = document.getElementById('mobar');
+          return { on: bar.classList.contains('is-on'),
+                   visible: r.top < innerHeight && r.bottom > 0,
+                   mobarHidden: !mobar || getComputedStyle(mobar).visibility === 'hidden' };
+        }""")
+        ok("sticky buy bar appears on scroll", bb["on"] and bb["visible"], str(bb))
+        ok("only one bottom bar at a time", bb["mobarHidden"], str(bb))
+
+        # empty cart must not render the checkout form
+        await pg.evaluate("Cart.clear()")
+        await pg.goto(D + "/checkout/", wait_until="networkidle")
+        await pg.wait_for_timeout(700)
+        ok("empty cart hides checkout form", not await pg.is_visible("#coForm"))
+        ok("empty cart shows empty state", await pg.is_visible("#coEmpty"))
 
         # ============ 10. BROKEN ROUTES / IMAGES ============
         for page in ["/", "/shop/", "/produk/?sku=SC-FDN-01", "/checkout/", "/order/"]:

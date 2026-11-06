@@ -55,6 +55,8 @@
   </div>
 </main>
 
+<div class="pdp-buybar" id="buybar"></div>
+
 <footer class="ftr">
   <div class="wrap">
     <div class="disclaimer">
@@ -138,6 +140,28 @@
       if (p.badge === "bundle") badges.push('<span class="pbadge pbadge--bundle">Bundle</span>');
     }
 
+    document.body.classList.add("has-buybar");
+
+    document.getElementById("buybar").innerHTML = `
+      <div class="pdp-buybar__price">
+        <span class="pdp-buybar__now" id="bbNow">${rm(price)}</span>
+        ${was ? `<span class="pdp-buybar__was">${rm(was)}</span>` : ""}
+      </div>
+      <button class="btn btn--rose" id="bbAdd" ${out ? "disabled" : ""}>
+        ${out ? "Habis stok" : "Tambah ke Troli"}
+      </button>`;
+
+    document.body.classList.add("has-buybar");
+
+    document.getElementById("buybar").innerHTML = `
+      <div class="pdp-buybar__price">
+        <span class="pdp-buybar__now" id="bbNow">${rm(price)}</span>
+        ${was ? `<span class="pdp-buybar__was">${rm(was)}</span>` : ""}
+      </div>
+      <button class="btn btn--rose" id="bbAdd" ${out ? "disabled" : ""}>
+        ${out ? "Habis stok" : "Tambah ke Troli"}
+      </button>`;
+
     document.getElementById("pdpRoot").innerHTML = `
       <div class="pdp__grid">
         <div>
@@ -218,6 +242,35 @@
     `;
 
     bindPdpEvents();
+    wireBuyBar();
+  }
+
+  /* sticky buy bar: appears once the inline Add to Cart scrolls away */
+  function wireBuyBar() {
+    const bar = document.getElementById("buybar");
+    const inline = document.getElementById("addBtn");
+    if (!bar || !inline) return;
+
+    const sync = () => {
+      const r = inline.getBoundingClientRect();
+      const show = r.bottom < 40 && window.innerWidth <= 760;
+      bar.classList.toggle("is-on", show);
+
+      /* Only one bottom bar at a time. Two stacked fixed bars cover the
+         page and the lower one eats every tap. */
+      const mobar = document.getElementById("mobar");
+      if (mobar) mobar.style.visibility = show ? "hidden" : "";
+    };
+
+    window.removeEventListener("scroll", window.__bbSync || (() => {}));
+    window.__bbSync = sync;
+    window.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync, { passive: true });
+    sync();
+
+    bar.querySelector("#bbAdd")?.addEventListener("click", () => {
+      document.getElementById("addBtn")?.click();
+    });
   }
 
   function bindPdpEvents() {

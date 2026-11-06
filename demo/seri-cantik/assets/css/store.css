@@ -1,6 +1,6 @@
 /* ============================================================
-   Seri Cantik Store — demo storefront
-   Tema: pink · cream · champagne · soft rose
+   Seri Cantik Store - demo storefront
+   Tema: pink  cream  champagne  soft rose
    Mobile-first. Tiada dependency luar selain Google Fonts.
    ============================================================ */
 
@@ -2129,7 +2129,7 @@ table { border-collapse: collapse; width: 100%; }
 .sim-notice b { display: block; margin-bottom: 4px; font-size: 12px; }
 
 /* ============================================================
-   RESPONSIVE — tablet
+   RESPONSIVE - tablet
    ============================================================ */
 @media (min-width: 560px) {
   :root { --gutter: 28px; }
@@ -2145,7 +2145,7 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* ============================================================
-   RESPONSIVE — desktop
+   RESPONSIVE - desktop
    ============================================================ */
 @media (min-width: 880px) {
   :root { --nav-h: 70px; --gutter: 32px; }
@@ -2205,7 +2205,7 @@ table { border-collapse: collapse; width: 100%; }
 
 /* ---------- PRINT ---------- */
 /* ============================================================
-   NARROW-VIEWPORT CONTAINMENT (320–375px)
+   NARROW-VIEWPORT CONTAINMENT (320-375px)
    Real overflow found in QA at 320px: the header brand refused to
    shrink (flex:0 0 auto), pushing .hdr__actions past the viewport and
    inflating document scrollWidth to 400px on EVERY page.
@@ -2260,7 +2260,7 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* minmax(0,1fr) prevents grid blowout, but must not kill the 2-col desktop
-   layout — scope it to the single-column range only. */
+   layout - scope it to the single-column range only. */
 .co__grid {
   grid-template-columns: minmax(0, 1fr);
 }
@@ -2278,7 +2278,7 @@ table { border-collapse: collapse; width: 100%; }
 }
 
 /* ============================================================
-   CARD POLISH — price row breathing room, bigger packshots,
+   CARD POLISH - price row breathing room, bigger packshots,
    readable microcopy (all found in visual QA)
    ============================================================ */
 .pcard__price {
@@ -2332,7 +2332,7 @@ table { border-collapse: collapse; width: 100%; }
   letter-spacing: 0.09em;
 }
 
-/* one search field per page — the header field is redundant on the shop page */
+/* one search field per page - the header field is redundant on the shop page */
 .shop-page .hdr__search {
   display: none !important;
 }
@@ -2355,6 +2355,350 @@ table { border-collapse: collapse; width: 100%; }
 
 @media (min-width: 761px) {
   .mobar {
+    display: none;
+  }
+}
+
+/* ============================================================
+   [hidden] MUST WIN
+   Any rule that sets display on a classed element silently defeats
+   the hidden attribute - .co__grid{display:grid} was rendering the
+   whole checkout form on top of the "cart is empty" state.
+   ============================================================ */
+[hidden] {
+  display: none !important;
+}
+
+/* ============================================================
+   MOBILE-FIRST PASS  (max-width 760px)
+   Benchmark: rootsys.cloud at 390px - display h1 64px, section
+   padding 80px, hairline surfaces, one heavy CTA. Measured, not copied.
+
+   Before this block the demo rendered at 7.7vw for the hero heading
+   (30px) and 34px section padding, which read as a shrunken desktop
+   page rather than an app. Everything below is scoped to small screens
+   so the desktop layout is untouched.
+   ============================================================ */
+@media (max-width: 760px) {
+  :root {
+    --gutter: 18px;
+    --nav-h: 58px;
+  }
+
+  body {
+    font-size: 15.5px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ---------- TYPE SCALE ---------- */
+  /* 11vw at 390 = 43px, 7.7vw -> 43vw is the leap that makes it read native */
+  .h-display {
+    font-size: clamp(38px, 11vw, 54px);
+    line-height: 1.02;
+    letter-spacing: -0.028em;
+    margin-bottom: 16px;
+  }
+
+  .h-sec {
+    font-size: clamp(27px, 7.2vw, 34px);
+    line-height: 1.12;
+    letter-spacing: -0.022em;
+  }
+
+  .hero__sub {
+    font-size: 16px;
+    line-height: 1.62;
+    margin-bottom: 20px;
+    max-width: none;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    margin-bottom: 8px;
+  }
+
+  .sec__head p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ---------- SECTION RHYTHM ---------- */
+  /* 34px -> 54px. The air is most of what makes a page feel premium. */
+  .sec {
+    padding-block: 54px;
+  }
+
+  .sec__head {
+    margin-bottom: 18px;
+    gap: 10px;
+  }
+
+  /* ---------- HERO ---------- */
+  /* tighter top so the product visual is reachable without a long scroll */
+  .hero {
+    padding-block: 22px 30px;
+  }
+
+  .hero__inner {
+    gap: 18px;
+  }
+
+  .hero__pill {
+    font-size: 11px;
+    padding: 5px 12px 5px 6px;
+    margin-bottom: 14px;
+    max-width: 100%;
+  }
+
+  .hero__pill span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .hero__actions {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  .hero__actions .btn {
+    width: 100%;
+    min-height: 54px;
+    font-size: 15.5px;
+  }
+
+  /* one item per line - 3-column check layouts degrade badly at 320px */
+  .hero__proof {
+    display: grid;
+    gap: 9px;
+    padding-top: 16px;
+    font-size: 13.5px;
+  }
+
+  .hero__proof li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero__art {
+    min-height: 0;
+  }
+
+  .hero__collage {
+    aspect-ratio: 1 / 0.86;
+    max-height: 300px;
+  }
+
+  .hero__stamp {
+    width: 68px;
+    height: 68px;
+    font-size: 8px;
+  }
+
+  /* ---------- ANNOUNCEMENT ---------- */
+  .ann {
+    font-size: 11.5px;
+    letter-spacing: 0.01em;
+  }
+
+  .ann__track {
+    gap: 28px;
+    padding: 9px 0;
+  }
+
+  /* ---------- HEADER ---------- */
+  .hdr__inner {
+    gap: 8px;
+  }
+
+  /* ---------- CATEGORIES ---------- */
+  .cat {
+    padding: 16px 14px;
+  }
+
+  /* ---------- PRODUCT GRID ---------- */
+  /* 2-up is right for phones, but the cards need more room between them */
+  .pgrid {
+    gap: 14px;
+  }
+
+  .pcard__name {
+    font-size: 13.5px;
+    line-height: 1.3;
+  }
+
+  .pcard__price {
+    gap: 6px;
+  }
+
+  .pcard__off {
+    margin-left: 0;
+  }
+
+  .pcard__cta {
+    min-height: 42px;
+    font-size: 12.5px;
+  }
+
+  /* a wider peek so horizontal rails feel swipeable, not cut off */
+  .rail > * {
+    flex: 0 0 70%;
+    max-width: 240px;
+  }
+
+  .rev {
+    flex: 0 0 88%;
+  }
+
+  /* ---------- FORGE CTA ---------- */
+  .forge-cta__btns {
+    display: grid;
+    gap: 10px;
+  }
+
+  .forge-cta__btns .btn {
+    width: 100%;
+    min-height: 52px;
+  }
+
+  /* ---------- TAP TARGETS ---------- */
+  .chip,
+  .catnav__inner a,
+  .mlink {
+    min-height: 42px;
+  }
+
+  .footer__links a {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* ============================================================
+   MOBILE PRODUCT PAGE — conversion layout
+   Visual QA at 390px showed the packshot eating the whole first
+   screen, pushing the variant chips and Add to Cart below the fold.
+   Fix: shorter media, 44px variant chips, sticky buy bar.
+   ============================================================ */
+@media (max-width: 760px) {
+  .pdp__grid {
+    gap: 18px;
+  }
+
+  /* the square packshot was ~353px tall; 4:3 gets the buy controls up */
+  .pdp__gallery {
+    aspect-ratio: 4 / 3.1;
+  }
+
+  .pdp__gallery .pk {
+    width: 62%;
+  }
+
+  .pdp__title {
+    font-size: clamp(26px, 7.6vw, 32px);
+    line-height: 1.1;
+    letter-spacing: -0.022em;
+  }
+
+  .pdp__short {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* variant chips were ~34px tall - too short for a thumb */
+  .vopt {
+    min-height: 46px;
+    padding: 11px 16px;
+    font-size: 13.5px;
+  }
+
+  .variants {
+    gap: 9px;
+  }
+
+  /* quantity + add-to-cart stacked full width instead of side by side */
+  .pdp__buy {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .pdp__buy .qty {
+    height: 54px;
+  }
+
+  .pdp__buy .qty button {
+    width: 42px;
+    height: 54px;
+  }
+
+  .pdp__buy .qty input {
+    height: 54px;
+    font-size: 15px;
+  }
+
+  .pdp__buy .btn {
+    min-height: 54px;
+    font-size: 15px;
+    min-width: 0;
+  }
+
+  /* sticky buy bar keeps the primary action permanently reachable */
+  .pdp-buybar {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 68;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: #fdfaf6;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -6px 24px rgba(43, 31, 36, 0.1);
+    transform: translateY(130%);
+    transition: transform 0.24s var(--ease);
+  }
+
+  .pdp-buybar.is-on {
+    transform: none;
+  }
+
+  .pdp-buybar__price {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+    flex: 0 0 auto;
+  }
+
+  .pdp-buybar__now {
+    font-size: 17px;
+    font-weight: 750;
+    color: var(--ink);
+  }
+
+  .pdp-buybar__was {
+    font-size: 11px;
+    color: var(--ink-3);
+    text-decoration: line-through;
+  }
+
+  .pdp-buybar .btn {
+    flex: 1;
+    min-height: 50px;
+  }
+
+  body.has-buybar {
+    padding-bottom: calc(78px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 761px) {
+  .pdp-buybar {
     display: none;
   }
 }
