@@ -44,8 +44,8 @@ storefront-my/
 ├── docs/
 │   ├── RESEARCH.md         competitor + conversion notes
 │   ├── qa.py               landing QA (42 checks)
-│   ├── qa_demo.py          demo store QA (117 checks)
-│   ├── shots_demo.py       demo screenshots (32)
+│   ├── qa_demo.py          demo store QA (143 checks)
+│   ├── shots_demo.py       demo screenshots (35)
 │   ├── shots.py            screenshot generator (26 shots)
 │   ├── qa.log              latest QA run
 │   └── screenshots/        desktop, tablet, mobile captures

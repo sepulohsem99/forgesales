@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ms-MY">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produk Disimpan — Seri Cantik Store (Demo)</title>
+<meta name="description" content="Senarai produk kegemaran anda di Seri Cantik Store. Kedai demo untuk tujuan demonstrasi.">
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://forgesales.pages.dev/demo/seri-cantik/simpan/">
+<meta property="og:title" content="Produk Disimpan — Seri Cantik Store (Demo)">
+<meta property="og:description" content="Senarai produk kegemaran anda. Kedai demo, bukan jualan sebenar.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#93344f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2393344f'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='18' fill='white' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/demo/seri-cantik/assets/css/store.css">
+</head>
+<body class="has-mobar">
+
+<div class="ann" role="region" aria-label="Pengumuman">
+  <div class="ann__track" id="annTrack"></div>
+</div>
+
+<main>
+  <div class="wrap">
+    <nav class="crumb" aria-label="Laluan">
+      <a href="/demo/seri-cantik/">Utama</a>
+      <span aria-hidden="true">›</span>
+      <span>Disimpan</span>
+    </nav>
+
+    <header class="page-head">
+      <div>
+        <span class="eyebrow">Senarai anda</span>
+        <h1 class="h-sec">Produk <em>disimpan.</em></h1>
+        <p class="page-head__sub">
+          Tekan ikon hati pada mana-mana produk untuk simpan di sini.
+          Senarai ini disimpan dalam pelayar anda sahaja.
+        </p>
+      </div>
+    </header>
+
+    <div class="saved-bar" id="savedBar" hidden>
+      <span id="savedCount">0 produk</span>
+      <button class="btn btn--ghost btn--sm" id="clearSaved" type="button">Kosongkan senarai</button>
+    </div>
+
+    <div class="pgrid" id="savedGrid"></div>
+
+    <div class="empty-state" id="savedEmpty" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+        <path d="M12 20.2S3.8 15 3.8 9.4A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 8.2 3c0 5.6-8.2 10.8-8.2 10.8z"/>
+      </svg>
+      <h3>Belum ada produk disimpan</h3>
+      <p>Tekan ikon hati pada kad produk untuk simpan kegemaran anda.</p>
+      <a class="btn btn--rose btn--sm" href="/demo/seri-cantik/shop/">Lihat Produk</a>
+    </div>
+
+    <p class="tiny saved-note">
+      Senarai disimpan dalam <code>localStorage</code> pelayar ini sahaja. Tiada data dihantar ke mana-mana pelayan.
+    </p>
+  </div>
+</main>
+
+<div class="mobar" id="mobar">
+  <a class="btn btn--rose btn--sm" href="https://forgesales.pages.dev/#start" data-forge-cta>
+    Dapatkan Kedai Online Saya
+  </a>
+</div>
+
+<script src="/demo/seri-cantik/assets/js/data.js"></script>
+<script src="/demo/seri-cantik/assets/js/packshot.js"></script>
+<script src="/demo/seri-cantik/assets/js/store.js"></script>
+<script>
+(function () {
+  mountChrome("saved");
+
+  document.getElementById("annTrack").innerHTML = (function () {
+    const msgs = [
+      "Kedai demo — tiada jualan sebenar",
+      "Produk disimpan dalam pelayar anda sahaja",
+      "Penghantaran percuma untuk belanja RM100 ke atas",
+    ];
+    const one = msgs.map((m) => `<span>${m}</span>`).join("");
+    return one + one;
+  })();
+
+  function render() {
+    Wish.load();
+    const items = PRODUCTS.filter((p) => Wish.has(p.sku));
+    const grid = document.getElementById("savedGrid");
+    const bar = document.getElementById("savedBar");
+
+    if (!items.length) {
+      grid.innerHTML = "";
+      bar.hidden = true;
+      document.getElementById("savedEmpty").hidden = false;
+      return;
+    }
+
+    document.getElementById("savedEmpty").hidden = true;
+    bar.hidden = false;
+    document.getElementById("savedCount").textContent =
+      items.length + (items.length === 1 ? " produk" : " produk");
+    grid.innerHTML = items.map((p) => productCard(p)).join("");
+    bindAddButtons(grid);
+  }
+
+  document.getElementById("clearSaved").addEventListener("click", () => {
+    Wish.ids.slice().forEach((sku) => Wish.toggle(sku));
+    toast("Senarai disimpan dikosongkan");
+    render();
+  });
+
+  document.addEventListener("wish:change", render);
+  render();
+})();
+</script>
+</body>
+</html>

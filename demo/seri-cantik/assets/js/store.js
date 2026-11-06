@@ -260,6 +260,7 @@ const Wish = {
     } catch {
       /* ignore */
     }
+    document.dispatchEvent(new CustomEvent("wish:change"));
     return this.ids.includes(sku);
   },
   has(sku) {
@@ -376,6 +377,17 @@ const ICONS = {
   bank: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10l9-6 9 6M5 10v9h14v-9M9 19v-5h6v5"/></svg>`,
   wallet: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18M16 14.5h2"/></svg>`,
   cash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/></svg>`,
+  home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.2 12 3l9 7.2"/><path d="M5.5 9.4V20h13V9.4"/><path d="M9.6 20v-5.4h4.8V20"/></svg>`,
+  grid: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.2" y="3.2" width="7.2" height="7.2" rx="2"/><rect x="13.6" y="3.2" width="7.2" height="7.2" rx="2"/><rect x="3.2" y="13.6" width="7.2" height="7.2" rx="2"/><rect x="13.6" y="13.6" width="7.2" height="7.2" rx="2"/></svg>`,
+  heart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2S3.8 15 3.8 9.4A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 8.2 3c0 5.6-8.2 10.8-8.2 10.8z"/></svg>`,
+  more: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>`,
+
+  /* filled twins: active tabs use these so the state is not colour-only */
+  homeFill: `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 10.2 12 3l9 7.2V20H5.5v-9.8"/><path d="M9.6 20v-5.4h4.8V20" fill="#fff" stroke="none"/></svg>`,
+  gridFill: `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3.2" y="3.2" width="7.2" height="7.2" rx="2"/><rect x="13.6" y="3.2" width="7.2" height="7.2" rx="2"/><rect x="3.2" y="13.6" width="7.2" height="7.2" rx="2"/><rect x="13.6" y="13.6" width="7.2" height="7.2" rx="2"/></svg>`,
+  cartFill: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 3h3.2l2.5 11.4h10.6l2-8.4H6.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="19.4" r="1.7"/><circle cx="17.6" cy="19.4" r="1.7"/></svg>`,
+  heartFill: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.2S3.8 15 3.8 9.4A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 8.2 3c0 5.6-8.2 10.8-8.2 10.8z"/></svg>`,
+  moreFill: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>`,
 };
 
 /** Bina header + drawer + cart drawer ke dalam body. */
@@ -463,11 +475,38 @@ function mountChrome(activePage = "home") {
     </aside>
   `;
 
+  /* ---------- bottom tab bar (mobile only) ---------- */
+  const tabs = [
+    { id: "home",  label: "Utama",    href: "/demo/seri-cantik/",        icon: ICONS.home,  fill: ICONS.homeFill },
+    { id: "shop",  label: "Kategori", href: "/demo/seri-cantik/shop/",   icon: ICONS.grid,  fill: ICONS.gridFill },
+    { id: "cart",  label: "Troli",    action: "cart",                    icon: ICONS.cart,  fill: ICONS.cartFill },
+    { id: "saved", label: "Simpan",   href: "/demo/seri-cantik/simpan/", icon: ICONS.heart, fill: ICONS.heartFill },
+    { id: "more",  label: "Lagi",     action: "menu",                    icon: ICONS.more,  fill: ICONS.moreFill },
+  ];
+
+  const tabbar = document.createElement("nav");
+  tabbar.className = "tabbar";
+  tabbar.id = "tabbar";
+  tabbar.setAttribute("aria-label", "Navigasi utama");
+  tabbar.innerHTML = tabs.map((t) => {
+    const active = t.id === activePage;
+    const common = `class="tabbar__item${active ? " is-active" : ""}"` +
+      (active ? ' aria-current="page"' : "");
+    const inner = `${active ? t.fill : t.icon}<span class="tabbar__label">${t.label}</span>` +
+      (t.id === "cart" ? '<span class="tabbar__badge" id="tabCartCount" hidden>0</span>' : "") +
+      (t.id === "saved" ? '<span class="tabbar__badge tabbar__badge--soft" id="tabWishCount" hidden>0</span>' : "");
+    return t.href
+      ? `<a ${common} href="${t.href}" data-tab="${t.id}">${inner}</a>`
+      : `<button ${common} type="button" data-tab="${t.id}" data-tab-action="${t.action}">${inner}</button>`;
+  }).join("");
+
   const body = document.body;
   body.insertBefore(hdr, body.firstChild);
   hdr.after(catnav);
   body.appendChild(drawer);
   body.appendChild(cartBg);
+  body.appendChild(tabbar);
+  body.classList.add("has-tabbar");
 
   /* --- events --- */
   const nav = $("#hdr");
@@ -499,6 +538,17 @@ function mountChrome(activePage = "home") {
   $("#cartBtn")?.addEventListener("click", openCart);
   $$("[data-close-cart]").forEach((b) => b.addEventListener("click", closeCart));
 
+  /* bottom tab actions (Troli, Lagi) */
+  $$("[data-tab-action]").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      if (btn.dataset.tabAction === "cart") openCart();
+      if (btn.dataset.tabAction === "menu") {
+        drawer.classList.add("is-open");
+        document.body.classList.add("no-scroll");
+      }
+    })
+  );
+
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
     drawer.classList.remove("is-open");
@@ -519,8 +569,24 @@ function mountChrome(activePage = "home") {
   Promo.load();
   Promo.validate();
   syncCartUI();
+  syncTabBadges();
 
-  document.addEventListener("cart:change", syncCartUI);
+  document.addEventListener("cart:change", () => {
+    syncCartUI();
+    syncTabBadges();
+  });
+  document.addEventListener("wish:change", syncTabBadges);
+}
+
+/** Tab-bar counters: cart quantity and saved-item count. */
+function syncTabBadges() {
+  const set = (el, n) => {
+    if (!el) return;
+    el.textContent = n;
+    el.hidden = n === 0;
+  };
+  set($("#tabCartCount"), Cart.count());
+  set($("#tabWishCount"), (Wish.ids || []).length);
 }
 
 function openCart() {

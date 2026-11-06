@@ -300,9 +300,10 @@ async def main():
         await pg.set_viewport_size({"width": 390, "height": 844})
         await pg.goto(D + "/", wait_until="networkidle")
         await pg.wait_for_timeout(800)
-        ok("burger visible on mobile",
-           await pg.evaluate("getComputedStyle(document.getElementById('burger')).display !== 'none'"))
-        await pg.click("#burger")
+        # the hamburger is intentionally replaced by the bottom tab bar
+        ok("hamburger replaced by tab bar on mobile",
+           await pg.evaluate("getComputedStyle(document.getElementById('burger')).display") == "none")
+        await pg.click('[data-tab="more"]')
         await pg.wait_for_timeout(600)
         ok("mobile drawer opens", await pg.is_visible(".mdrawer.is-open"))
         ok("scroll locked when drawer open",
@@ -383,8 +384,85 @@ async def main():
         ok("empty cart hides checkout form", not await pg.is_visible("#coForm"))
         ok("empty cart shows empty state", await pg.is_visible("#coEmpty"))
 
+        # ============ 9d. BOTTOM TAB BAR ============
+        await pg.set_viewport_size({"width": 390, "height": 844})
+        await pg.goto(D + "/", wait_until="networkidle")
+        await pg.wait_for_timeout(1200)
+        tabc = await pg.evaluate("""() => {
+          const bar = document.getElementById('tabbar');
+          const items = [...bar.querySelectorAll('.tabbar__item')];
+          const cs = getComputedStyle(bar);
+          const r = bar.getBoundingClientRect();
+          return { exists: !!bar, n: items.length,
+                   labels: items.map(i => i.querySelector('.tabbar__label').innerText),
+                   display: cs.display,
+                   bottom: Math.round(r.bottom), vh: innerHeight,
+                   active: bar.querySelector('.tabbar__item.is-active')?.dataset.tab,
+                   ariaCurrent: bar.querySelector('.tabbar__item.is-active')?.getAttribute('aria-current'),
+                   minH: Math.min(...items.map(i => i.getBoundingClientRect().height)) };
+        }""")
+        ok("tab bar exists on mobile", tabc["exists"])
+        ok("tab bar has 5 tabs", tabc["n"] == 5, str(tabc["n"]))
+        ok("tab labels correct",
+           tabc["labels"] == ["Utama", "Kategori", "Troli", "Simpan", "Lagi"], str(tabc["labels"]))
+        ok("tab bar pinned to viewport bottom",
+           abs(tabc["bottom"] - tabc["vh"]) <= 1, f"{tabc['bottom']} vs {tabc['vh']}")
+        ok("tabs are 44px+ touch targets", tabc["minH"] >= 44, str(tabc["minH"]))
+        ok("active tab marked with aria-current", tabc["ariaCurrent"] == "page", str(tabc["ariaCurrent"]))
+        ok("home tab active on home", tabc["active"] == "home", str(tabc["active"]))
+
+        # tab navigation actually routes and keeps state
+        await pg.click('[data-tab="shop"]')
+        await pg.wait_for_load_state("networkidle"); await pg.wait_for_timeout(900)
+        ok("Kategori tab routes to shop", "/shop/" in pg.url, pg.url)
+        ok("shop tab becomes active",
+           await pg.evaluate("document.querySelector('.tabbar__item.is-active').dataset.tab") == "shop")
+
+        # save two products, then check the Simpan tab
+        ws = await pg.query_selector_all("[data-wish]")
+        await ws[0].click(); await pg.wait_for_timeout(400)
+        await ws[1].click(); await pg.wait_for_timeout(500)
+        ok("cart/wish badge counts saved items",
+           await pg.evaluate("document.getElementById('tabWishCount').textContent") == "2")
+
+        await pg.click('[data-tab="saved"]')
+        await pg.wait_for_load_state("networkidle"); await pg.wait_for_timeout(1200)
+        ok("Simpan tab routes to /simpan/", "/simpan/" in pg.url, pg.url)
+        saved_n = await pg.evaluate("document.querySelectorAll('#savedGrid .pcard').length")
+        ok("saved page lists saved products", saved_n == 2, str(saved_n))
+        ok("saved page has no console errors",
+           not await pg.evaluate("!!window.__err"))
+
+        # Troli tab opens the drawer
+        await pg.goto(D + "/shop/", wait_until="networkidle"); await pg.wait_for_timeout(900)
+        await pg.click('[data-add="SC-KRM-03"]'); await pg.wait_for_timeout(1000)
+        await pg.evaluate("closeCart()"); await pg.wait_for_timeout(400)
+        await pg.click('[data-tab="cart"]'); await pg.wait_for_timeout(800)
+        ok("Troli tab opens the cart drawer",
+           await pg.evaluate("document.querySelector('.cart-bg').classList.contains('is-open')"))
+        await pg.evaluate("closeCart()"); await pg.wait_for_timeout(300)
+
+        # Lagi tab opens the menu drawer
+        await pg.click('[data-tab="more"]'); await pg.wait_for_timeout(800)
+        ok("Lagi tab opens the menu",
+           await pg.evaluate("document.getElementById('mdrawer').classList.contains('is-open')"))
+        await pg.evaluate("document.getElementById('mdrawer').classList.remove('is-open'); document.body.classList.remove('no-scroll')")
+        await pg.wait_for_timeout(300)
+
+        # tab bar must not cover content
+        await pg.goto(D + "/", wait_until="networkidle"); await pg.wait_for_timeout(900)
+        pad = await pg.evaluate("parseFloat(getComputedStyle(document.body).paddingBottom)")
+        barh = await pg.evaluate("document.getElementById('tabbar').getBoundingClientRect().height")
+        ok("body reserves tab-bar height", pad >= barh, f"pad={pad} bar={barh}")
+
+        # hidden on desktop
+        await pg.set_viewport_size({"width": 1440, "height": 900})
+        await pg.wait_for_timeout(500)
+        ok("tab bar hidden on desktop",
+           await pg.evaluate("getComputedStyle(document.getElementById('tabbar')).display") == "none")
+
         # ============ 10. BROKEN ROUTES / IMAGES ============
-        for page in ["/", "/shop/", "/produk/?sku=SC-FDN-01", "/checkout/", "/order/"]:
+        for page in ["/", "/shop/", "/produk/?sku=SC-FDN-01", "/checkout/", "/order/", "/simpan/"]:
             r = await pg.goto(D + page, wait_until="networkidle")
             ok(f"route {page} → 200", r.status == 200, str(r.status))
 

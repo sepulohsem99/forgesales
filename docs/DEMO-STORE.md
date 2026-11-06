@@ -71,7 +71,8 @@ No build step. No npm. No dependencies. Open the folder and it runs.
 | Subtotal, shipping, discount, total | Cart + checkout |
 | Demo discount codes | Checkout |
 | Cart persistence | `localStorage['sericantik.cart.v1']` |
-| Wishlist | `localStorage['sericantik.wish.v1']` |
+| Wishlist + `/simpan/` page | `localStorage['sericantik.wish.v1']` |
+| Bottom tab bar (mobile) | 5 tabs, badges, safe-area aware |
 
 ### Promotions (all arithmetic verified)
 | Code | Rule |
@@ -104,6 +105,7 @@ storefront-my/
 │   ├── produk/index.html       product detail (reads ?sku=)
 │   ├── checkout/index.html     simulated checkout
 │   ├── order/index.html        order confirmation (reads session)
+│   ├── simpan/index.html       saved / wishlist page
 │   └── assets/
 │       ├── css/store.css       design system (~2.4k lines)
 │       └── js/
@@ -220,3 +222,39 @@ be misleading to customers.
 - **Fail-safe scroll reveal** — content fades in on scroll, but anything still
   hidden after 1.2s is force-shown. Without this, a throttled tab or a
   full-page screenshot leaves most of the catalogue at `opacity: 0`.
+
+---
+
+## Mobile app shell
+
+Below 761px the store renders as a mobile app rather than a website:
+
+| Element | Behaviour |
+|---|---|
+| Bottom tab bar | 5 tabs — Utama / Kategori / Troli / Simpan / Lagi |
+| Active tab | Filled icon + brand tint + heavier label + `aria-current="page"` |
+| Badges | Cart quantity on Troli, saved count on Simpan |
+| Hamburger | Hidden — the tab bar replaces it |
+| Safe area | `env(safe-area-inset-bottom)` padding, 52px minimum touch height |
+| Content clearance | `body.has-tabbar` reserves the bar height so nothing is covered |
+| Forge CTA | Sits above the tab bar, never stacked on it |
+| PDP buy bar | Also lifted above the tab bar; the two never co-exist |
+| Desktop | Tab bar `display:none` above 761px — desktop nav unchanged |
+
+Benchmarked against rootsys.cloud at 390px (measured with the browser, not
+copied): display type 42.9px, section rhythm 54px, one opaque bar with a
+hairline, active state carried by icon fill as well as colour.
+
+### Mobile-specific rules learned here
+
+- **Never put non-ASCII characters in CSS comments.** The stylesheet is served
+  without a charset, so a single `<=` glyph silently kills the entire
+  `@media` block that follows it. Keep CSS comments ASCII.
+- **`[hidden]` must beat class display rules.** `.co__grid{display:grid}`
+  defeated the `hidden` attribute and rendered the checkout form on top of the
+  empty-cart state. There is a global `[hidden]{display:none!important}` now.
+- **Only one fixed bottom bar at a time.** The Forge CTA and the PDP buy bar
+  stacked and the lower one swallowed every tap.
+- **Scroll-reveal needs a fail-safe.** Anything still at `opacity:0` after
+  1.2s is forced visible, otherwise throttled tabs and full-page captures show
+  a blank catalogue.

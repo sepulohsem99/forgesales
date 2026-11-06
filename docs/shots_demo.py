@@ -132,6 +132,11 @@ async def main():
         await mgo("/")
         await m.screenshot(path=os.path.join(OUT, "m01-home-hero.png"))
         print("   m01-home-hero.png")
+        # tab bar close-up
+        bar = await m.query_selector("#tabbar")
+        await bar.screenshot(path=os.path.join(OUT, "m04-tabbar.png"))
+        print("   m04-tabbar.png")
+        print("   m01-home-hero.png")
         await m.evaluate("document.querySelectorAll('.reveal').forEach(e=>e.classList.add('is-in'))")
         await m.wait_for_timeout(350)
         await m.screenshot(path=os.path.join(OUT, "m00-home-full.png"), full_page=True)
@@ -145,7 +150,7 @@ async def main():
         # drawer
         await m.evaluate("window.scrollTo(0,0)")
         await m.wait_for_timeout(400)
-        await m.click("#burger")
+        await m.click('[data-tab="more"]')
         await m.wait_for_timeout(700)
         await m.screenshot(path=os.path.join(OUT, "m03-menu.png"))
         print("   m03-menu.png")
@@ -179,6 +184,17 @@ async def main():
         print("   m30-cart.png")
         await m.click(".cart-panel__close")
         await m.wait_for_timeout(500)
+
+        # saved page
+        await mgo("/shop/?cat=wajah")
+        ws = await m.query_selector_all("[data-wish]")
+        await ws[0].click(); await m.wait_for_timeout(400)
+        await ws[1].click(); await m.wait_for_timeout(500)
+        await mgo("/simpan/")
+        await m.evaluate("document.querySelectorAll('.reveal').forEach(e=>e.classList.add('is-in'))")
+        await m.wait_for_timeout(500)
+        await m.screenshot(path=os.path.join(OUT, "m50-saved.png"))
+        print("   m50-saved.png")
 
         await mgo("/checkout/")
         await m.screenshot(path=os.path.join(OUT, "m40-checkout.png"))
